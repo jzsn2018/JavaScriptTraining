@@ -1,3 +1,3 @@
 # JavaScriptTraining
 JavaScriptTraining
-学习JavaScript中的一些练习的代码片段
+这个库放本人在学习JavaScript过程中的一些练习的代码片段
