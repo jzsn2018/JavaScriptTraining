@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>getElementsByClassName()方法兼容IE低版本浏览器</title>
+</head>
+<body>
+<ul id="myUl">
+		<li class="light">1</li>
+		<li class="light dark">2</li>
+		<li class="light">3</li>
+	</ul>
+<ul id="myUl2">
+		<li class="light">1</li>
+		<li class="light dark">sencond</li>
+		<li class="light">3</li>
+		<p class="light dark">我是p标签里面的</p>
+	</ul>
+	<script>
+		console.log(document.tagName);
+		console.log(document.getElementsByClassName);
+		//ie9+以及现代浏览器上：getElementsByClassName() { [native code] }
+		//ie8-上：undefined
+		// 兼容性处理的原理
+			//IE8以上的浏览器用getElementsByClassName方法,再利用循环将特定标签下的特定class筛选出来
+			//IE8以下的浏览器通过getElementsByTagName先把特定标签筛选出来，再用循环去判断这些标签的className值与我们想要的class是否匹配(利用到正则表达式了)
+			
+		// 用一个对象opts存放传入的参数
+		var getElementByClassName =function (opts) {
+			var searchClass=opts.searchClass;//储存要查找的类名
+			var node=opts.node || document;//存储查找的范围
+			var tag =opts.tag || '*';//储存一定范围内要查找的标签
+			var result=[];//存储找到的集合
+		// 判断浏览器支不支持getElementsByClassName方法，不支持的返回undefined
+			if (document.getElementsByClassName) {
+				// 支持getElementsByClassName方法的浏览器的写法
+				var nodes = node.getElementsByClassName(searchClass);
+				// 将符合标签名的结果装填到result数组
+				if (tag !== '*') {
+					for (var i=0;i<nodes.length; i++) {
+						if (nodes[i].tagName === tag.toUpperCase()) {
+							result.push(nodes[i]);
+						}
+					}
+				}else{
+					result=nodes;
+				}
+				return result;
+			}else{
+				// 不支持getElementsByClassName方法的浏览器兼容的写法
+				var els=node.getElementsByTagName(tag);
+				var elsLen=els.length;
+				var i,j;
+				var pattern=new RegExp('(^|\\s)' + searchClass + '(\\s|$)');
+				//正则表达式,判断className是否符合我们要的那个
+				for (i=0,j=0; i < elsLen; i++) {
+					if (pattern.test(els[i].className)) {
+						result[j]=els[i]
+						j++;
+					}
+				}
+				return result;
+			}
+		}
+		var myUl=document.getElementById('myUl');
+		var myUl2=document.getElementById('myUl2');
+		var r=getElementByClassName({
+			searchClass:'light dark',
+			node:myUl2,
+			tag:'p'
+		});
+		console.log(r[0].innerHTML);
+	</script>
+</body>
+</html>
