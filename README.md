@@ -1,0 +1,3 @@
+# JavaScriptTraining
+JavaScriptTraining
+学习JavaScript中的一些练习的代码片段
