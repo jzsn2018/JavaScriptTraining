@@ -1,10 +1,11 @@
 var EventUtil = {
-		getTarget:function (event) {
+			getTarget:function (event) {
 				return event.target || event.srcElement	
 			},
-		preventDefault:function (event) {
+			preventDefault:function (event) {
 			event.preventDefault?event.preventDefault():event.returnValue = false;
 		},
 		stopPropagation:function (event) {
 			event.stopPropagation?event.stopPropagation():event.cancelBubble = true;
 		}
+	}
