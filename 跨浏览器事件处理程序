@@ -1,20 +1,17 @@
 var EventUtil = {
 			addHandler:function (element,type,handler) {
-				// IE9以上的浏览器以及现代浏览器的兼容代码
-				if (element.addEventListener){
-					element.addEventListener(type,handler,false)
-				 }else{
-				 	// IE10以下的浏览器的兼容代码
-				 	element.attachEvent('on'+type,handler)
-				 }
-			},
+				element.addEventListener?element.addEventListener(type,handler,false):element.attachEvent('on'+type,handler)
+				 },
 			removeHandler:function (element,type,handler) {
-				// IE9以上的浏览器以及现代浏览器的兼容代码
-				if (element.removeEventListener){
-					element.removeEventListener(type,handler,false)
-				 }else{
-				 	// IE10以下的浏览器的兼容代码
-				 	element.detachEvent('on'+type,handler)
-				 }
-			}
+				element.removeEventListener?element.removeEventListener(type,handler,false):element.detachEvent('on'+type,handler)
+				 },
+			getTarget:function (event) {
+				return event.target || event.srcElement	
+			},
+			preventDefault:function (event) {
+				event.preventDefault?event.preventDefault():event.returnValue = false;
+			},
+			stopPropagation:function (event) {
+				event.stopPropagation?event.stopPropagation():event.cancelBubble = true;
 		}
+	}
